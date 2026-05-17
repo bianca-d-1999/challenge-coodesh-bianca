@@ -10,8 +10,6 @@ Projeto de automação de testes desenvolvido como parte de processo seletivo, c
 
 **Playwright + TypeScript**
 
-Escolhi Playwright por ser o framework mais alinhado aos critérios do desafio:
-
 - **Auto-wait nativo** — o Playwright aguarda automaticamente elementos ficarem visíveis, habilitados e estáveis antes de interagir. Isso elimina completamente a necessidade de `waitForTimeout()` ou esperas fixas
 - **API testing integrado** — é possível testar endpoints REST no mesmo framework 
 - **Locators inteligentes** — prioriza seletores por role, placeholder e atributos semânticos, que são mais estáveis que XPath ou CSS frágeis
@@ -22,9 +20,11 @@ Escolhi Playwright por ser o framework mais alinhado aos critérios do desafio:
 ## Arquitetura — Page Object Model (POM)
 
 Cada página do sistema tem uma classe própria em `pages/`, responsável por:
-- Declarar seus locators como **getters privados** (evita o problema de inicialização antes do construtor)
+- Declarar seus locators como **getters privados**
 - Expor apenas métodos públicos com semântica de negócio (`fillAccountDetails`, `assertAccountCreated`)
-- Manter os testes limpos e sem detalhes de implementação
+- Manter os testes limpos
+
+## Estrutura
 
 pages/
 ├── HomePage.ts       → navegação principal
@@ -40,23 +40,21 @@ utils/
 
 ---
 
-## Decisões técnicas por desafio
-
 ### Desafio 01 — Registro E2E
 
-- Dados gerados dinamicamente via `userFactory.ts` usando timestamp — garante que cada execução usa um email único, sem conflito com cadastros anteriores
-- Fluxo dividido em etapas com assertions intermediárias (`assertSignupFormVisible`, `assertAccountInfoFormVisible`) para identificar exatamente onde uma falha ocorre
-- Validação final via `getByRole('heading', { name: 'Account Created!' })` — locator semântico e resistente a mudanças de estilo
+- Dados gerados dinamicamente via `userFactory.ts` usando timestamp 
+- Fluxo dividido em etapas com assertions intermediárias (`assertSignupFormVisible`, `assertAccountInfoFormVisible`) 
+- Validação final via `getByRole('heading', { name: 'Account Created!' })` — locator semântico
 
 ### Desafio 02 — Manipulação de Inventário
 
 - Adição em loop com hover para revelar o botão de adicionar ao carrinho, que só aparece no estado hover (comportamento real do site)
-- `.first()` usado explicitamente no locator do botão pois o wrapper contém dois elementos `.add-to-cart` (um visível, um oculto)
-- Validação do total calculada em runtime: `total === preço unitário × quantidade`, sem valor hardcoded
+- `.first()` usado explicitamente no locator do botão pois o wrapper contém dois elementos `.add-to-cart` 
+- Validação do total calculada em runtime: `total === preço unitário × quantidade`
 
 ### Desafio API — GET /api/productsList
 
-- Usa `request.newContext()` do Playwright — contexto de API puro, sem abrir browser, mais rápido e direto
+- Usa `request.newContext()` do Playwright 
 - Valida estrutura mínima de cada produto (`id`, `name`, `price`, `category`) além do status code, garantindo que a resposta contém dados válidos e não apenas um array vazio
 
 ---
