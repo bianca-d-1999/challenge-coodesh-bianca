@@ -1,0 +1,21 @@
+{
+  "name": "automation-challenge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:ui": "npx playwright test --ui",
+    "test:report": "npx playwright show-report",
+    "test:registration": "npx playwright test 01_registration",
+    "test:cart": "npx playwright test 02_cart",
+    "test:api": "npx playwright test 03_api"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "typescript": "^6.0.3"
+  }
+}
